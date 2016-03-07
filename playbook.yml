@@ -11,20 +11,14 @@
   hosts: Ubuntu
   become: True
   tasks:
-    - name: Add batcave to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.222 batcave"
-    - name: Add stargate to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.227 stargate"
-    - name: Add atlantis to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.229 atlantis"
-    - name: Add docker to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.233 docker"
-    - name: Add nas to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.234 nas"
-    - name: Add pi to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.235 pi"
-    - name: Add pi2 to hostfile
-      lineinfile: dest=/etc/hosts line="192.168.1.236 pi2"
+    - lineinfile: dest=/etc/hosts line="192.168.1.222 batcave"
+    - lineinfile: dest=/etc/hosts line="192.168.1.227 stargate"
+    - lineinfile: dest=/etc/hosts line="192.168.1.229 atlantis"
+    - lineinfile: dest=/etc/hosts line="192.168.1.233 docker"
+    - lineinfile: dest=/etc/hosts line="192.168.1.234 nas"
+    - lineinfile: dest=/etc/hosts line="192.168.1.235 pi"
+    - lineinfile: dest=/etc/hosts line="192.168.1.236 pi2"
+    - lineinfile: dest=/etc/hosts line="192.168.1.250 freenas"
 
 - name: Install VirtualBox 
   hosts: Ubuntu
@@ -38,8 +32,7 @@
       apt: name=virtualbox-5.0 state=present update_cache=yes
 
 - name: Install Docker
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: True
   vars_prompt:
     - name: "userAccount"
@@ -49,7 +42,7 @@
     - name: "composeVersion"
       prompt: "Docker Compose version to install."
       private: no
-      default: "1.4.1"
+      default: "1.6.2"
 
   tasks:
     - debug: msg="userAccount = {{ userAccount }}"
@@ -62,8 +55,8 @@
       file: path=/root/install-docker owner=root group=root mode=0500 
     - name: Execute Docker Installation Script
       shell: /root/install-docker 
-    - name: Set Memory and Swap Accounting
-      lineinfile: dest=/etc/default/grub regexp='^GRUB_CMDLINE_LINUX=""' line='GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"'
+#   - name: Set Memory and Swap Accounting
+#     lineinfile: dest=/etc/default/grub regexp='^GRUB_CMDLINE_LINUX=""' line='GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"'
     - name: Add account to the docker group 
       user: name={{ userAccount }} groups=docker 
     - name: Restart Docker
