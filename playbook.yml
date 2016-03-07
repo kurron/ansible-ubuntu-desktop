@@ -169,7 +169,7 @@
 
 - name: Install Tools I Like
   hosts: Ubuntu
-  sudo: True
+  become: True
   tasks:
       - apt: name=tree state=latest
       - apt: name=tmux state=latest
@@ -180,8 +180,7 @@
       - apt: name=chromium-browser state=latest
 
 - name: Mount NAS Drive
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: True
   tasks:
       - name: Install NFS client
