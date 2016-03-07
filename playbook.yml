@@ -26,6 +26,13 @@
     - name: Add pi2 to hostfile
       lineinfile: dest=/etc/hosts line="192.168.1.236 pi2"
 
+- name: Install VirtualBox 
+  hosts: Ubuntu
+  become: True
+  tasks:
+    - name: Add repository key
+      apt_key: url=https://www.virtualbox.org/download/oracle_vbox.asc state=present
+
 - name: Install Docker
 # hosts: Ubuntu
   hosts: nobody
