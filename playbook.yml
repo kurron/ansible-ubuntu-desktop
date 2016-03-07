@@ -155,8 +155,7 @@
       command: logger 'Hello From Ansible!'
 
 - name: Install Sysdig
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: True
   tasks:
       - name: Download the signing key
@@ -167,6 +166,18 @@
         shell: apt-get -y install linux-headers-$(uname -r)
       - name: Install Sysdig
         apt: name=sysdig state=latest update_cache=true
+
+- name: Install Tools I Like
+  hosts: Ubuntu
+  sudo: True
+  tasks:
+      - apt: name=tree state=latest
+      - apt: name=tmux state=latest
+      - apt: name=sysstat state=latest
+      - apt: name=iotop state=latest
+      - apt: name=iftop state=latest
+      - apt: name=wireshark state=latest
+      - apt: name=chromium-browser state=latest
 
 - name: Mount NAS Drive
 # hosts: Ubuntu
