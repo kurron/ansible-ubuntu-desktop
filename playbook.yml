@@ -58,7 +58,8 @@
 #   - name: Set Memory and Swap Accounting
 #     lineinfile: dest=/etc/default/grub regexp='^GRUB_CMDLINE_LINUX=""' line='GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"'
     - name: Add account to the docker group 
-      user: name={{ userAccount }} groups=docker 
+#     user: name={{ userAccount }} groups=docker 
+      command: usermod -aG docker {{ userAccount }}
     - name: Restart Docker
       command: service docker restart
     - name: Test Docker
@@ -71,37 +72,41 @@
       command: docker-compose --version
 
 - name: Tweak User Account
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: False
   vars_prompt:
     - name: "userAccount"
       prompt: "The account to apply the tweaks to"
       private: no
-      default: "ubuntu"
+      default: "rkurr"
   tasks:
     - name: set editor to VI
-      lineinfile: dest={{ userAccount }}/.bashrc line='set -o vi'
+      lineinfile: dest=/home/{{ userAccount }}/.bashrc line='set -o vi'
 
 - name: Install Git
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: True
   tasks:
     - name: Install Git
       apt: name=git state=latest update_cache=true cache_valid_time=600
 
 - name: Install Git Projects
-# hosts: Ubuntu
-  hosts: nobody
+  hosts: Ubuntu
   become: False
   tasks:
     - name: Make GitHub Directory
       file: path={{ ansible_env.HOME }}/GitHub state=directory mode=0755
-    - name: Pull Down Monitoring Infrastructure
-      git: repo=https://github.com/kurron/docker-monitor-compose.git dest={{ ansible_env.HOME }}/GitHub/docker-monitor-compose
-    - name: Pull Down Data Pump 
-      git: repo=https://github.com/kurron/docker-monitor-jmeter.git dest={{ ansible_env.HOME }}/GitHub/docker-monitor-jmeter
+    - git: repo=https://github.com/kurron/jvm-development-environment.git dest={{ ansible_env.HOME }}/GitHub/jvm-development-environment
+    - git: repo=https://github.com/kurron/ansible-pull-development.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-development
+    - git: repo=https://github.com/kurron/ansible-pull-docker.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-docker
+    - git: repo=https://github.com/kurron/ansible-pull-operations.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-operations
+    - git: repo=https://github.com/kurron/ansible-pull-transparent.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-transparent
+    - git: repo=https://github.com/kurron/ansible-pull-desktop-tweaks.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-desktop-tweaks
+    - git: repo=https://github.com/kurron/ansible-pull-server-tweaks.git dest={{ ansible_env.HOME }}/GitHub/ansible-pull-server-tweaks
+    - git: repo=https://github.com/kurron/scripts.git dest={{ ansible_env.HOME }}/GitHub/scripts
+    - git: repo=https://github.com/kurron/docker-oracle-jdk-8.git dest={{ ansible_env.HOME }}/GitHub/docker-oracle-jdk-8
+    - git: repo=https://github.com/kurron/sequence-diagrams.git dest={{ ansible_env.HOME }}/GitHub/sequence-diagrams
+    - git: repo=https://github.com/awslabs/git-secrets.git dest={{ ansible_env.HOME }}/GitHub/git-secrets
 
 - name: Install Newrelic
 # hosts: Ubuntu
