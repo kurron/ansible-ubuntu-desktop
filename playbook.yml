@@ -74,14 +74,11 @@
 - name: Tweak User Account
   hosts: Ubuntu
   become: False
-  vars_prompt:
-    - name: "userAccount"
-      prompt: "The account to apply the tweaks to"
-      private: no
-      default: "rkurr"
   tasks:
     - name: set editor to VI
-      lineinfile: dest=/home/{{ userAccount }}/.bashrc line='set -o vi'
+      lineinfile: dest={{ ansible_env.HOME }}/.bashrc line='set -o vi'
+    - name: Copy Git configuration file
+      copy: src=files/.gitconfig dest={{ ansible_env.HOME }}/.gitconfig mode=644 backup=no
 
 - name: Install Git
   hosts: Ubuntu
