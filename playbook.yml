@@ -44,6 +44,17 @@
 #   - name: Test Packer
 #     command: /usr/bin/packer --version
 
+- name: Install Otto
+  hosts: Ubuntu
+  become: True
+  vars:
+    otto_version: 0.2.0
+  tasks:
+    - name: Download And Install Otto
+      unarchive: src=https://releases.hashicorp.com/otto/{{ otto_version }}/otto_{{ otto_version }}_linux_amd64.zip dest=/usr/bin mode=0555 copy=no
+    - name: Test Otto
+      command: /usr/bin/otto --version
+
 - name: Install VirtualBox 
   hosts: Ubuntu
   become: True
@@ -63,10 +74,8 @@
       prompt: "The account to add to the docker group."
       private: no
       default: "rkurr"
-    - name: "composeVersion"
-      prompt: "Docker Compose version to install."
-      private: no
-      default: "1.6.2"
+  vars:
+    composeVersion: 1.6.2
 
   tasks:
     - debug: msg="userAccount = {{ userAccount }}"
