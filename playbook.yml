@@ -137,6 +137,7 @@
     - git: repo=https://github.com/kurron/docker-oracle-jdk-8.git dest={{ ansible_env.HOME }}/GitHub/docker-oracle-jdk-8
     - git: repo=https://github.com/kurron/sequence-diagrams.git dest={{ ansible_env.HOME }}/GitHub/sequence-diagrams
     - git: repo=https://github.com/awslabs/git-secrets.git dest={{ ansible_env.HOME }}/GitHub/git-secrets
+    - git: repo=https://github.com/hashicorp/otto-getting-started.git dest={{ ansible_env.HOME }}/GitHub/otto-getting-started
 
 - name: Install Newrelic
 # hosts: Ubuntu
