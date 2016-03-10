@@ -23,13 +23,26 @@
 - name: Install Vagrant
   hosts: Ubuntu
   become: True
+  vars:
+    vagrant_version: 1.8.1
   tasks:
     - name: Download Vagrant package
-      get_url: url=https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb dest=/tmp/vagrant.deb mode=0440
+      get_url: url=https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb dest=/root/vagrant.deb mode=0440
     - name: Install Vagrant package
-      apt: deb=/tmp/vagrant.deb
+      apt: deb=/root/vagrant.deb
     - name: Test Vagrant 
-      command: vagrant --version 
+      command: /usr/bin/vagrant --version 
+
+- name: Install Packer
+  hosts: Ubuntu
+  become: True
+  vars:
+    packer_version: 0.9.0
+  tasks:
+    - name: Download And Install Packer
+      unarchive: src=https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip dest=/usr/bin mode=0555 copy=no
+#   - name: Test Packer
+#     command: /usr/bin/packer --version
 
 - name: Install VirtualBox 
   hosts: Ubuntu
