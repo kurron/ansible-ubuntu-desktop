@@ -20,6 +20,17 @@
     - lineinfile: dest=/etc/hosts line="192.168.1.236 pi2"
     - lineinfile: dest=/etc/hosts line="192.168.1.250 freenas"
 
+- name: Install Vagrant
+  hosts: Ubuntu
+  become: True
+  tasks:
+    - name: Download Vagrant package
+      get_url: url=https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb dest=/tmp/vagrant.deb mode=0440
+    - name: Install Vagrant package
+      apt: deb=/tmp/vagrant.deb
+    - name: Test Vagrant 
+      command: vagrant --version 
+
 - name: Install VirtualBox 
   hosts: Ubuntu
   become: True
