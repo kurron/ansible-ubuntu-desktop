@@ -209,6 +209,7 @@
       - apt: name=iftop state=latest
       - apt: name=wireshark state=latest
       - apt: name=chromium-browser state=latest
+      - apt: name=filezilla state=latest
 
 - name: Mount NAS Drive
   hosts: Ubuntu
