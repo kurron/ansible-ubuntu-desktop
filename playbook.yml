@@ -210,6 +210,7 @@
       - apt: name=wireshark state=latest
       - apt: name=chromium-browser state=latest
       - apt: name=filezilla state=latest
+      - apt: name=grsync state=latest
 
 - name: Mount NAS Drive
   hosts: Ubuntu
